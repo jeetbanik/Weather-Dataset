@@ -1,15 +1,18 @@
 ---
-title: "Weather Prediction Project"
+title: "Weather Forecasting Project"
 author: "Jeet Banik"
 date: "09/01/2020"
-output: pdf_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 # Introduction
 
-This report is related to the "Choose Your Own Project" of the HarvardX: PH125.9x Data Science: Capstone course. In this project, the objective is to use Machine Learning to predict the weather. The original data set can be found using the following link:
+This report is related to the "Choose Your Own Project" of the HarvardX: PH125.9x Data Science: Capstone course. In this project, the objective is to use Machine Learning to forecast the weather. The original data set can be found using the following link:
 https://www.kaggle.com/vonline9/weather-istanbul-data-20092019/data
-To provide satisfying results the weather is predicted by using different supervised machine learning algorithms and calculating its accuracy and thus finding the best model for predicting weather more correctly based on the accuracy score.
+To provide satisfying results the weather is predicted by using different supervised machine learning algorithms and calculating its accuracy and thus finding the best model for forecasting weather more correctly based on the accuracy score.
 
 # Analysis
 
@@ -158,12 +161,8 @@ The k-nearest neighbors (KNN) algorithm is a simple, easy-to-implement supervise
 dat2 <- df
 
 # Data cleaning
-dat2 <- dat2[,-1]
+dat2 <- dat2[,c(-1,-6,-7,-8,-9)]
 dat2$AvgWind <- as.numeric(dat2$AvgWind)
-dat2$MoonRise <- as.numeric(dat2$MoonRise)
-dat2$MoonSet <- as.numeric(dat2$MoonSet)
-dat2$SunRise <- as.numeric(dat2$SunRise)
-dat2$SunSet <- as.numeric(dat2$SunSet)
 dat2$Rain <- as.numeric(dat2$Rain)
 dat2$MinTemp <- as.numeric(dat2$MinTemp)
 dat2$AvgHumidity <- as.numeric(dat2$AvgHumidity)
@@ -177,11 +176,11 @@ head(dat2)
 r <- sample(1:nrow(dat2), 0.9*nrow(dat2))
 
 # Create normalization function
-norm <-function(x){
+norm <- function(x){
   (x-min(x))/(max(x)-min(x))}
 
 # Run normalization on first 10 columns of the dataset as they are the predictors
-dat2_norm <- as.data.frame(lapply(dat2[,c(2,3,4,5,6,7,8,9,10,11)], norm))
+dat2_norm <- as.data.frame(lapply(dat2[,c(2,3,4,5,6,7)], norm))
 summary(dat2_norm)
 train2 <- dat2_norm[r,] 
 
@@ -216,14 +215,10 @@ set.seed(100, sample.kind="Rounding")
 dat3 <- df
 
 # Data cleaning
-dat3 <- dat3[,-1]
+dat3 <- dat3[,c(-1,-6,-7,-8,-9)]
 dat3$Condition <- ifelse(dat3$Condition =="Sunny", 1, 0)
 dat3$Condition <- factor(dat3$Condition, levels = c(0, 1))
 dat3$AvgWind <- as.integer(dat3$AvgWind)
-dat3$MoonRise <- as.integer(dat3$MoonRise)
-dat3$MoonSet <- as.integer(dat3$MoonSet)
-dat3$SunRise <- as.integer(dat3$SunRise)
-dat3$SunSet <- as.integer(dat3$SunSet)
 dat3$Rain <- as.integer(dat3$Rain)
 dat3$MinTemp <- as.integer(dat3$MinTemp)
 dat3$AvgHumidity <- as.integer(dat3$AvgHumidity)
@@ -272,9 +267,9 @@ The resultant accuracy of predictions for all the four models are as follows:
 ``` {r result, message = FALSE, warning = FALSE, echo = FALSE}
 acc
 ```
-As we see from the results, Random Forest Model is the most accurate model in predicting the weather dataset with an accuracy score of 0.8198043, which means the predictions of this model has an accuracy of 81.98% or ~82%.
+As we see from the results, Random Forest Model is the most accurate model in forecasting the weather with an accuracy score of 0.8079227, which means the predictions of this model has an accuracy of 80.79% or ~81%.
 
 # Conclusion
 
-For predicting the weather dataset, 3 separate machine learning models are used in this project and each of its accuracy scores are calculated and compared to find out the best model for weather prediction here. The first model, Naive Bayes Model, scored an accuracy of 0.7133676 which is a decent score but yet needs to be improved. The second model, KNN Model, scored an accuracy of 0.6384615 which decreases the accuracy score from the previous model significantly and thus should not be taken into consideration. The third and final model, Random Forest Model, scored an accuracy of 0.8198043, which has improved by a lot compared to the previous model and is the best out of all the models used here. Thus, the Random Forest Model, with an accuracy of 81.98% or ~82%, should be considered for predicting the weather dataset most correctly.
+For forecasting the weather dataset, 3 separate machine learning models are used in this project and each of its accuracy scores are calculated and compared to find out the best model for weather forecast here. The first model, Naive Bayes Model, scored an accuracy of 0.7133676 which is a decent score but yet needs to be improved. The second model, KNN Model, scored an accuracy of 0.6102564 which decreases the accuracy score from the previous model significantly and thus should not be taken into consideration. The third and final model, Random Forest Model, scored an accuracy of 0.8079227, which has improved by a lot compared to the previous model and is the best out of all the models used here. Thus, the Random Forest Model, with an accuracy of 80.79% or 81%, should be considered for forecasting the weather dataset most correctly.
 Other different machine learning models could also improve the results further, but hardware limitations, such as the RAM, are a constraint.
