@@ -25,7 +25,6 @@ getwd()
 
 # Read the data into a data frame 'df'
 df <- read.csv("Istanbul Weather Data.csv")
-
 View(df)
 
 # Data analysis
@@ -122,12 +121,8 @@ acc
 dat2 <- df
 
 # Data cleaning
-dat2 <- dat2[,-1]
+dat2 <- dat2[,c(-1,-6,-7,-8,-9)]
 dat2$AvgWind <- as.numeric(dat2$AvgWind)
-dat2$MoonRise <- as.numeric(dat2$MoonRise)
-dat2$MoonSet <- as.numeric(dat2$MoonSet)
-dat2$SunRise <- as.numeric(dat2$SunRise)
-dat2$SunSet <- as.numeric(dat2$SunSet)
 dat2$Rain <- as.numeric(dat2$Rain)
 dat2$MinTemp <- as.numeric(dat2$MinTemp)
 dat2$AvgHumidity <- as.numeric(dat2$AvgHumidity)
@@ -139,11 +134,11 @@ head(dat2)
 r <- sample(1:nrow(dat2), 0.9*nrow(dat2)) 
 
 # Create normalization function
-norm <-function(x){
+norm <- function(x){
   (x-min(x))/(max(x)-min(x))}
 
 # Run normalization on first 10 columns of the dataset as they are the predictors
-dat2_norm <- as.data.frame(lapply(dat2[,c(2,3,4,5,6,7,8,9,10,11)], norm))
+dat2_norm <- as.data.frame(lapply(dat2[,c(2,3,4,5,6,7)], norm))
 summary(dat2_norm)
 train2 <- dat2_norm[r,] 
 
@@ -175,14 +170,10 @@ set.seed(100, sample.kind="Rounding")
 dat3 <- df
 
 # Data cleaning
-dat3 <- dat3[,-1]
+dat3 <- dat3[,c(-1,-6,-7,-8,-9)]
 dat3$Condition <- ifelse(dat3$Condition =="Sunny", 1, 0)
 dat3$Condition <- factor(dat3$Condition, levels = c(0, 1))
 dat3$AvgWind <- as.integer(dat3$AvgWind)
-dat3$MoonRise <- as.integer(dat3$MoonRise)
-dat3$MoonSet <- as.integer(dat3$MoonSet)
-dat3$SunRise <- as.integer(dat3$SunRise)
-dat3$SunSet <- as.integer(dat3$SunSet)
 dat3$Rain <- as.integer(dat3$Rain)
 dat3$MinTemp <- as.integer(dat3$MinTemp)
 dat3$AvgHumidity <- as.integer(dat3$AvgHumidity)
@@ -223,4 +214,4 @@ acc
 
 # Check accuracy results
 acc %>% knitr::kable()
-# Most accurate model is the Random Forest Model with an accuracy score of 0.8198043 #
+# Most accurate model is the Random Forest Model with an accuracy score of 0.8079227 #
